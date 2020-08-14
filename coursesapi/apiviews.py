@@ -88,9 +88,34 @@ class Courses(APIView):
 class Lessons(APIView):
     def get(sef, request):
         lessons = Lesson.objects.all()
-        response = CourseSerializer(lessons, many=True).data
+        response = LessonSerializer(lessons, many=True).data
 
         return Response(response)
+
+
+    def put(self, request):
+        lesson = Lesson.objects.get(id=request.data['id'])
+        lesson = LessonSerializer(lesson, data=reques.data)
+        if lesson.is_valid():
+            return Response(lesson.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(lesson.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def post(self, request):
+        lesson = LessonSerializer(data=request.data)
+
+        if lesson.is_valid():
+            lesson.save()
+            return Response(lesson.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(lesson.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def delete(self, request):
+        lesson = Lesson.objects.get(id=pk).delete()
+
+        return Response({'response': 'success'}, status=status.HTTP_200_OK)
 
 
 class Questions(APIView):
@@ -98,3 +123,28 @@ class Questions(APIView):
         questions = Question.objects.all()
         response = QuestionSerializer(questions, many=true).data
         return response
+
+
+    def put(self, request):
+        question = Question.objects.get(id=request.data['id'])
+        question = QuestionSerializer(question, data=reques.data)
+        if question.is_valid():
+            return Response(question.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(question.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def post(self, request):
+        question = QuestionSerializer(data=request.data)
+
+        if question.is_valid():
+            question.save()
+            return Response(question.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(question.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def delete(self, request):
+        question = Question.objects.get(id=pk).delete()
+
+        return Response({'response': 'success'}, status=status.HTTP_200_OK)
